@@ -1,0 +1,22 @@
+{
+  "name": "package.json",
+  "version": "1.0.0",
+  "description": "HTTP-client, which can send all crucial API3 requests and parse response",
+  "main": "client.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nmeredov/HTTP-client.git"
+  },
+  "author": "Nazar Meredov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nmeredov/HTTP-client/issues"
+  },
+  "homepage": "https://github.com/nmeredov/HTTP-client#readme",
+  "dependencies": {
+    "node-fetch": "^2.6.1"
+  }
+}
