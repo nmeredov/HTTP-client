@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/nmeredov/HTTP-client#readme",
   "dependencies": {
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "utils": "^0.3.1",
+    "uuid": "^8.3.0",
+    "uuidv4": "^6.2.3"
   }
 }
