@@ -80,23 +80,34 @@ const requestOptions3 = {
   headers: { 'Content-Type': 'application/json' }
 };
 
-fetch(
+async function initializeSession() { 
+  await fetch(
   'http://10.10.88.52:9092/onewallet/api3/start_session_initialization',
   requestOptions1
 )
   .then((response) => response.text())
   .then((result) => console.log(result))
   .catch((error) => console.log('error', error));
+}
 
-fetch(
+async function completeSession() { 
+  await fetch(
   'http://10.10.88.52:9092/onewallet/api3/complete_session_initialization',
   requestOptions2
 )
   .then((response) => response.text())
   .then((result) => console.log(result))
   .catch((error) => console.log('error', error));
+}
 
-fetch('http://10.10.88.52:9092/onewallet/api3/get_balance', requestOptions3)
+
+async function getBalance() { 
+  await fetch('http://10.10.88.52:9092/onewallet/api3/get_balance', requestOptions3)
   .then((response) => response.text())
   .then((result) => console.log(result))
   .catch((error) => console.log('error', error));
+}
+
+  initializeSession();
+  completeSession();
+  getBalance();
