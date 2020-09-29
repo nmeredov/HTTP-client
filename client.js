@@ -30,20 +30,13 @@ const correlationId = setEnvironmentVariable.getRandomId(32);
 const sessionId = setEnvironmentVariable.getRandomId(32);
 const licenseeSessionId = setEnvironmentVariable.getRandomId(32);
 
-// console.log(correlationId);
-// console.log(sessionId);
-// console.log(licenseeSessionId);
-
-
-
 const raw1 = JSON.stringify({
   correlationId: correlationId,
   sessionId: sessionId,
-  balanceId: 'combined',
-  casinoId: 'xtreme0000000001',
+  casinoId: 'joycasino0000001',
   licenseeSessionId: licenseeSessionId,
   currency: 'EUR',
-  licenseePlayerId: 'vm000000000001',
+  licenseePlayerId: 'aaaaaa',
   channel: {
     type: 'Phone',
     wrapped: false,
@@ -53,6 +46,17 @@ const raw1 = JSON.stringify({
 });
 
 const raw2 = JSON.stringify({
+  correlationId: correlationId,
+  sessionId: sessionId,
+  playerId: '108nit1q4ndf1jx9',
+  channel: {
+    type: 'Phone',
+    wrapped: false,
+    os: 'Other'
+  }
+});
+
+const raw3 = JSON.stringify({
   correlationId: correlationId,
   sessionId: sessionId,
   balanceId: 'combined'
@@ -66,13 +70,13 @@ const requestOptions1 = {
 
 const requestOptions2 = {
   method: 'PUT',
-  body: raw1,
+  body: raw2,
   headers: { 'Content-Type': 'application/json' }
 };
 
 const requestOptions3 = {
   method: 'POST',
-  body: raw2,
+  body: raw3,
   headers: { 'Content-Type': 'application/json' }
 };
 
