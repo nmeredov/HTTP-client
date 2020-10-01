@@ -29,6 +29,12 @@ var setEnvironmentVariable = {
 const correlationId = setEnvironmentVariable.getRandomId(32);
 const sessionId = setEnvironmentVariable.getRandomId(32);
 const licenseeSessionId = setEnvironmentVariable.getRandomId(32);
+const gameId = setEnvironmentVariable.getRandomId(24);
+const txId = setEnvironmentVariable.getRandomNumericId(18);
+const betId = setEnvironmentVariable.getRandomId(32);
+
+let timestamp = new Date().toJSON();
+const placeTime = timestamp;
 
 const raw1 = JSON.stringify({
   correlationId: correlationId,
@@ -62,6 +68,47 @@ const raw3 = JSON.stringify({
   balanceId: 'combined'
 });
 
+const raw4 = JSON.stringify({
+  correlationId: correlationId,
+  gameId: gameId,
+  sessionId: sessionId,
+  txId: txId,
+  gameType: 'roulette',
+  // gameSubType: 'gameSubType',
+  table: {
+    tableId: 'vctlz20yfnmp1ylr'
+    // virtualTableId: 'virtualTableId'
+  },
+  bets: [
+    {
+      betId: betId,
+      code: '0000000000000117',
+      amount: 5
+    }
+  ],
+  placeTime: placeTime,
+  balanceId: 'combined'
+});
+
+const raw5 = JSON.stringify({
+  correlationId: correlationId,
+  gameId: gameId,
+  reason: {
+    type: 'GameFinished',
+    finishedTransactions: [
+      {
+        txId: txId,
+        payoffs: [
+          {
+            betId: betId,
+            amount: 10
+          }
+        ]
+      }
+    ]
+  }
+});
+
 const requestOptions1 = {
   method: 'PUT',
   body: raw1,
@@ -79,35 +126,78 @@ const requestOptions3 = {
   body: raw3,
   headers: { 'Content-Type': 'application/json' }
 };
+const requestOptions4 = {
+  method: 'PUT',
+  body: raw4,
+  headers: { 'Content-Type': 'application/json' }
+};
 
-async function initializeSession() { 
+const requestOptions5 = {
+  method: 'PUT',
+  body: raw5,
+  headers: { 'Content-Type': 'application/json' }
+};
+
+async function initializeSession() {
   await fetch(
-  'http://10.10.88.52:9092/onewallet/api3/start_session_initialization',
-  requestOptions1
-)
-  .then((response) => response.text())
-  .then((result) => console.log(result))
-  .catch((error) => console.log('error', error));
+    'http://10.10.88.52:9092/onewallet/api3/start_session_initialization',
+    requestOptions1
+  )
+    .then((response) => response.text())
+    .then((result) => console.log('initializeSession_request', result))
+    .catch((error) => console.log('error', error));
 }
 
-async function completeSession() { 
+async function completeSession() {
   await fetch(
-  'http://10.10.88.52:9092/onewallet/api3/complete_session_initialization',
-  requestOptions2
-)
-  .then((response) => response.text())
-  .then((result) => console.log(result))
-  .catch((error) => console.log('error', error));
+    'http://10.10.88.52:9092/onewallet/api3/complete_session_initialization',
+    requestOptions2
+  )
+    .then((response) => response.text())
+    .then((result) => console.log('completeSession_request', result))
+    .catch((error) => console.log('error', error));
 }
 
-
-async function getBalance() { 
-  await fetch('http://10.10.88.52:9092/onewallet/api3/get_balance', requestOptions3)
-  .then((response) => response.text())
-  .then((result) => console.log(result))
-  .catch((error) => console.log('error', error));
+async function getBalance() {
+  await fetch(
+    'http://10.10.88.52:9092/onewallet/api3/get_balance',
+    requestOptions3
+  )
+    .then((response) => response.text())
+    .then((result) => console.log('get_balance_request', result))
+    .catch((error) => console.log('error', error));
 }
 
-  initializeSession();
-  completeSession();
-  getBalance();
+async function withdrawal() {
+  await fetch(
+    'http://10.10.88.52:9092/onewallet/api3/withdrawal',
+    requestOptions4
+  )
+    .then((response) => response.text())
+    .then((result) => console.log('withdrawal_request', result))
+    .catch((error) => console.log('error', error));
+}
+
+async function finalSettlement() {
+  await fetch(
+    'http://10.10.88.52:9092/onewallet/api3/final_settlement',
+    requestOptions5
+  )
+    .then((response) => response.text())
+    .then((result) => console.log('final_settlement_request', result))
+    .catch((error) => console.log('error', error));
+}
+
+// const timeout = setTimeout(function () {}, 5000);
+
+initializeSession();
+
+completeSession();
+
+getBalance();
+
+withdrawal();
+
+finalSettlement();
+
+getBalance();
