@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+const Promise = require('promise');
 
 var setEnvironmentVariable = {
   getRandomId: function (idLength) {
@@ -194,10 +195,10 @@ initializeSession();
 
 completeSession();
 
-getBalance();
+// getBalance();
 
-withdrawal();
+// withdrawal();
 
-finalSettlement();
+// finalSettlement();
 
-getBalance();
+// getBalance();
