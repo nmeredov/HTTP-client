@@ -30,8 +30,15 @@ const correlationId = setEnvironmentVariable.getRandomId(32);
 const sessionId = setEnvironmentVariable.getRandomId(32);
 const licenseeSessionId = setEnvironmentVariable.getRandomId(32);
 const gameId = setEnvironmentVariable.getRandomId(24);
-const txId = setEnvironmentVariable.getRandomNumericId(18);
-const betId = setEnvironmentVariable.getRandomId(32);
+const txId1 = setEnvironmentVariable.getRandomNumericId(18);
+const txId2 = setEnvironmentVariable.getRandomNumericId(18);
+const betId1 = setEnvironmentVariable.getRandomId(32);
+const betId2 = setEnvironmentVariable.getRandomId(32);
+const betId3 = setEnvironmentVariable.getRandomId(32);
+const gameType = 'holdem';
+const tableId = 'HoldemTable00001';
+const bet = 5;
+const payyof = 10;
 
 let timestamp = new Date().toJSON();
 const placeTime = timestamp;
@@ -70,38 +77,90 @@ const raw3 = JSON.stringify({
 
 const raw4 = JSON.stringify({
   correlationId: correlationId,
-  gameId: gameId,
   sessionId: sessionId,
-  txId: txId,
-  gameType: 'roulette',
-  // gameSubType: 'gameSubType',
   table: {
-    tableId: 'vctlz20yfnmp1ylr'
+    tableId: tableId
     // virtualTableId: 'virtualTableId'
   },
-  bets: [
-    {
-      betId: betId,
-      code: '0000000000000117',
-      amount: 5
-    }
-  ],
-  placeTime: placeTime,
+  gameType: gameType,
+  // gameSubType: 'gameSubType',
   balanceId: 'combined'
 });
 
 const raw5 = JSON.stringify({
   correlationId: correlationId,
   gameId: gameId,
+  sessionId: sessionId,
+  txId: txId1,
+  gameType: gameType,
+  // gameSubType: 'gameSubType',
+  table: {
+    tableId: tableId
+    // virtualTableId: 'virtualTableId'
+  },
+  bets: [
+    {
+      betId: betId1,
+      code: 'HoldemBet0000001',
+      amount: bet
+    },
+    {
+      betId: betId2,
+      code: 'HoldemBet0000002',
+      amount: bet
+    }
+  ],
+  placeTime: placeTime,
+  balanceId: 'combined'
+});
+
+const raw6 = JSON.stringify({
+  correlationId: correlationId,
+  gameId: gameId,
+  sessionId: sessionId,
+  txId: txId2,
+  gameType: gameType,
+  // gameSubType: 'gameSubType',
+  table: {
+    tableId: tableId
+    // virtualTableId: 'virtualTableId'
+  },
+  bets: [
+    {
+      betId: betId3,
+      code: 'HoldemBet0000003',
+      amount: bet
+    }
+  ],
+  placeTime: placeTime,
+  balanceId: 'combined'
+});
+
+const raw7 = JSON.stringify({
+  correlationId: correlationId,
+  gameId: gameId,
   reason: {
     type: 'GameFinished',
     finishedTransactions: [
       {
-        txId: txId,
+        txId: txId1,
         payoffs: [
           {
-            betId: betId,
-            amount: 10
+            betId: betId1,
+            amount: payyof
+          },
+          {
+            betId: betId2,
+            amount: payyof
+          }
+        ]
+      },
+      {
+        txId: txId2,
+        payoffs: [
+          {
+            betId: betId3,
+            amount: payyof
           }
         ]
       }
@@ -126,8 +185,9 @@ const requestOptions3 = {
   body: raw3,
   headers: { 'Content-Type': 'application/json' }
 };
+
 const requestOptions4 = {
-  method: 'PUT',
+  method: 'POST',
   body: raw4,
   headers: { 'Content-Type': 'application/json' }
 };
@@ -135,6 +195,18 @@ const requestOptions4 = {
 const requestOptions5 = {
   method: 'PUT',
   body: raw5,
+  headers: { 'Content-Type': 'application/json' }
+};
+
+const requestOptions6 = {
+  method: 'PUT',
+  body: raw6,
+  headers: { 'Content-Type': 'application/json' }
+};
+
+const requestOptions7 = {
+  method: 'PUT',
+  body: raw7,
   headers: { 'Content-Type': 'application/json' }
 };
 
@@ -167,34 +239,56 @@ async function getBalance() {
     .then((result) => console.log('get_balance_request', result))
     .catch((error) => console.log('error', error));
 }
-
-async function withdrawal() {
+async function getBalanceForTable() {
   await fetch(
-    'http://10.10.88.52:9092/onewallet/api3/withdrawal',
+    'http://10.10.88.52:9092/onewallet/api3/get_balance',
     requestOptions4
   )
     .then((response) => response.text())
-    .then((result) => console.log('withdrawal_request', result))
+    .then((result) => console.log('get_balance_request_for_table', result))
+    .catch((error) => console.log('error', error));
+  setTimeout(function () {}, 500);
+}
+
+async function withdrawal1() {
+  await fetch(
+    'http://10.10.88.52:9092/onewallet/api3/withdrawal',
+    requestOptions5
+  )
+    .then((response) => response.text())
+    .then((result) => console.log('withdrawal_request_1', result))
+    .catch((error) => console.log('error', error));
+}
+
+async function withdrawal2() {
+  await fetch(
+    'http://10.10.88.52:9092/onewallet/api3/withdrawal',
+    requestOptions6
+  )
+    .then((response) => response.text())
+    .then((result) => console.log('withdrawal_request_2', result))
     .catch((error) => console.log('error', error));
 }
 
 async function finalSettlement() {
   await fetch(
     'http://10.10.88.52:9092/onewallet/api3/final_settlement',
-    requestOptions5
+    requestOptions7
   )
     .then((response) => response.text())
     .then((result) => console.log('final_settlement_request', result))
     .catch((error) => console.log('error', error));
 }
 
-async function scenario() {
+async function ThreeBetsInOneRound() {
   await initializeSession();
   await completeSession();
   await getBalance();
-  await withdrawal();
+  await getBalanceForTable();
+  await withdrawal1();
+  await withdrawal2();
   await finalSettlement();
   await getBalance();
 }
 
-scenario();
+ThreeBetsInOneRound();
