@@ -156,7 +156,6 @@ async function completeSession() {
     .then((response) => response.text())
     .then((result) => console.log('completeSession_request', result))
     .catch((error) => console.log('error', error));
-  setTimeout(function () {}, 5000);
 }
 
 async function getBalance() {
@@ -167,7 +166,6 @@ async function getBalance() {
     .then((response) => response.text())
     .then((result) => console.log('get_balance_request', result))
     .catch((error) => console.log('error', error));
-  setTimeout(function () {}, 6000);
 }
 
 async function withdrawal() {
