@@ -1,5 +1,4 @@
 const fetch = require('node-fetch');
-const Promise = require('promise');
 
 var setEnvironmentVariable = {
   getRandomId: function (idLength) {
@@ -157,6 +156,7 @@ async function completeSession() {
     .then((response) => response.text())
     .then((result) => console.log('completeSession_request', result))
     .catch((error) => console.log('error', error));
+  setTimeout(function () {}, 5000);
 }
 
 async function getBalance() {
@@ -167,6 +167,7 @@ async function getBalance() {
     .then((response) => response.text())
     .then((result) => console.log('get_balance_request', result))
     .catch((error) => console.log('error', error));
+  setTimeout(function () {}, 6000);
 }
 
 async function withdrawal() {
@@ -189,16 +190,13 @@ async function finalSettlement() {
     .catch((error) => console.log('error', error));
 }
 
-// const timeout = setTimeout(function () {}, 5000);
+async function scenario() {
+  await initializeSession();
+  await completeSession();
+  await getBalance();
+  await withdrawal();
+  await finalSettlement();
+  await getBalance();
+}
 
-initializeSession();
-
-completeSession();
-
-// getBalance();
-
-// withdrawal();
-
-// finalSettlement();
-
-// getBalance();
+scenario();
