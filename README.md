@@ -25,3 +25,5 @@ Scenario Cancelled game:
 6. withdrawal2
 7. finalSettlement (game cancell)
 8. getBalance
+
+It is left to add tests (asserts/expects)
