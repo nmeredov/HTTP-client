@@ -1,3 +1,0 @@
---timeout 200000
---recursive
---reporter mochawesome

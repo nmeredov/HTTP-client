@@ -12,13 +12,11 @@ const txId1 = setEnvironmentVariable.getRandomNumericId(18);
 const txId2 = setEnvironmentVariable.getRandomNumericId(18);
 const betId1 = setEnvironmentVariable.getRandomId(32);
 const betId2 = setEnvironmentVariable.getRandomId(32);
-const betId3 = setEnvironmentVariable.getRandomId(32);
 const gameType = 'holdem';
 const tableId = 'HoldemTable00001';
+const resolution = 'cancel the game';
 const bet = 5;
-const bet1 = 10; // two bet in first transaction
-const payyof = 10;
-const payyof1 = 30; // two payyof in first transaction and one payyof in second transaction
+const payyof = 10; // one bet in first transaction and one bet in second transaction
 
 let timestamp = new Date().toJSON();
 const placeTime = timestamp;
@@ -83,11 +81,6 @@ const withdrawalBodyObjects1 = {
       betId: betId1,
       code: 'HoldemBet0000001',
       amount: bet
-    },
-    {
-      betId: betId2,
-      code: 'HoldemBet0000002',
-      amount: bet
     }
   ],
   placeTime: placeTime,
@@ -107,7 +100,7 @@ const withdrawalBodyObjects2 = {
   },
   bets: [
     {
-      betId: betId3,
+      betId: betId2,
       code: 'HoldemBet0000003',
       amount: bet
     }
@@ -120,31 +113,7 @@ const finalSettlementBodyObjects = {
   correlationId: correlationId,
   gameId: gameId,
   reason: {
-    type: 'GameFinished',
-    finishedTransactions: [
-      {
-        txId: txId1,
-        payoffs: [
-          {
-            betId: betId1,
-            amount: payyof
-          },
-          {
-            betId: betId2,
-            amount: payyof
-          }
-        ]
-      },
-      {
-        txId: txId2,
-        payoffs: [
-          {
-            betId: betId3,
-            amount: payyof
-          }
-        ]
-      }
-    ]
+    type: 'GameCancelled'
   }
 };
 
@@ -373,10 +342,10 @@ describe('Checks withdrawal_request_1 and no error in response', async () => {
     testResponse = await withdrawal1();
     testResponseBody = await testResponse.json();
     currentBalance = testResponseBody.balances[0].amount;
-    previousBalance = currentBalance + bet1;
-    expectedBalance = previousBalance - bet1;
+    previousBalance = currentBalance + bet;
+    expectedBalance = previousBalance - bet;
     console.log('Previous balance:', previousBalance);
-    console.log('Bet is:', bet1);
+    console.log('Bet is:', bet);
     console.log('Current balance:', currentBalance);
     console.log('Expected balance:', expectedBalance);
     console.log('withdrawal_request_1', withdrawalBody1);
@@ -435,8 +404,8 @@ describe('Checks if final_settlement_request response status is successful', asy
   before(async () => {
     testResponse = await finalSettlement();
     testResponseBody = await testResponse.json();
-    console.log('Resolution is: winning the game')
-    console.log('Payout is:', payyof1);
+    console.log('Resolution is:', resolution);
+    console.log('Payout is:', payyof);
     console.log('final_settlement_request', finalSettlementBody);
   });
 
@@ -460,8 +429,8 @@ describe('Checks balance and if response status is successful', async () => {
     testResponse = await getBalance();
     testResponseBody = await testResponse.json();
     currentBalance = testResponseBody.balances[0].amount;
-    initialBalance = currentBalance - payyof1 + bet1 + bet;
-    expectedBalance = initialBalance - bet1 - bet + payyof1;
+    initialBalance = currentBalance - payyof + bet + bet;
+    expectedBalance = initialBalance - bet - bet + payyof;
     console.log('Initial balance:', initialBalance);
     console.log('Current balance:', currentBalance);
     console.log('Expected balance:', expectedBalance);

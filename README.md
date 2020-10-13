@@ -1,7 +1,10 @@
 # HTTP-client
 HTTP-client, which can send all crucial API3 requests and parse responses.
 
-HTTP-client covers two basic scenarios: 1) Three bets in one round | 2) Cancelled game
+HTTP-client with tests covers two basic scenarios: 1) Three bets in one round | 2) Cancelled game
+Framework "mocha" with library "chai" are used for the tests.
+
+To run the test open terminal in this project and write - npm test
 
 
 Scenario Three bets in one round:
@@ -16,8 +19,8 @@ Scenario Three bets in one round:
 8. getBalance
 
 All requests of this scenario have been covered with tests.
-scenario is located in floder "test".
-To run the test open terminal in this project and write npm test.
+Scenario is located in folder "test".
+To run the test separately open terminal in this project and write - npm test test/threeBetsInOneRound.js           
 
 
 Scenario Cancelled game:
@@ -31,4 +34,9 @@ Scenario Cancelled game:
 7. finalSettlement (game cancell)
 8. getBalance
 
-Covering with tests - WIP.
+All requests of this scenario have been covered with tests.
+Scenario is located in folder "test".
+To run the test separately open terminal in this project and write - npm test test/cancelledGame.js           
+
+
+To run the certain test write e.g. npm test -- --f 'Checks withdrawal_request_2'
