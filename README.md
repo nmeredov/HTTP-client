@@ -15,6 +15,11 @@ Scenario Three bets in one round:
 7. finalSettlement (3 bets win)
 8. getBalance
 
+All requests of this scenario have been covered with tests.
+scenario is located in floder "test".
+To run the test open terminal in this project and write npm test.
+
+
 Scenario Cancelled game:
 
 1. initializeSession
@@ -26,4 +31,4 @@ Scenario Cancelled game:
 7. finalSettlement (game cancell)
 8. getBalance
 
-It is left to add tests (asserts/expects)
+Covering with tests - WIP.
