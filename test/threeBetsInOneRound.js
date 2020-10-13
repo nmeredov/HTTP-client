@@ -43,7 +43,9 @@ const betId3 = setEnvironmentVariable.getRandomId(32);
 const gameType = 'holdem';
 const tableId = 'HoldemTable00001';
 const bet = 5;
+const bet1 = 10; // two bet in first transaction
 const payyof = 10;
+const payyof1 = 30; // two payyof in first transaction and one payyof in second transaction
 
 let timestamp = new Date().toJSON();
 const placeTime = timestamp;
@@ -252,43 +254,24 @@ async function getBalanceForTable() {
 
 async function withdrawal1() {
   return fetch(
-    'return://10.10.88.52:9092/onewallet/api3/withdrawal',
+    'http://10.10.88.52:9092/onewallet/api3/withdrawal',
     withdrawalRequest1
   ).catch((error) => console.log('error', error));
 }
 
-// async function withdrawal2() {
-//   return fetch(
-//     'http://10.10.88.52:9092/onewallet/api3/withdrawal',
-//     withdrawalRequest2
-//   )
-//     .then((response) => response.text())
-//     .then((result) => console.log('withdrawal_request_2', result))
-//     .catch((error) => console.log('error', error));
-// }
+async function withdrawal2() {
+  return fetch(
+    'http://10.10.88.52:9092/onewallet/api3/withdrawal',
+    withdrawalRequest2
+  ).catch((error) => console.log('error', error));
+}
 
-// async function finalSettlement() {
-//   return fetch(
-//     'http://10.10.88.52:9092/onewallet/api3/final_settlement',
-//     finalSettlementRequest
-//   )
-//     .then((response) => response.text())
-//     .then((result) => console.log('final_settlement_request', result))
-//     .catch((error) => console.log('error', error));
-// }
-
-// async function ThreeBetsInOneRound() {
-//   await initializeSession();
-//   await completeSession();
-//   await getBalance();
-//   await getBalanceForTable();
-//   await withdrawal1();
-//   await withdrawal2();
-//   await finalSettlement();
-//   await getBalance();
-// }
-
-// ThreeBetsInOneRound();
+async function finalSettlement() {
+  return fetch(
+    'http://10.10.88.52:9092/onewallet/api3/final_settlement',
+    finalSettlementRequest
+  ).catch((error) => console.log('error', error));
+}
 
 describe('Checks if initializeSession response status is successful', async () => {
   let testResponse;
@@ -347,13 +330,13 @@ describe('Checks if completeSession response status is successful', async () => 
 describe('Checks balance and if response status is successful', async () => {
   let testResponse;
   let testResponseBody;
-  let lastBalance;
+  let currentBalance;
 
   before(async () => {
     testResponse = await getBalance();
     testResponseBody = await testResponse.json();
-    lastBalance = testResponseBody.balances[0].amount;
-    console.log('Player balance is ' + lastBalance);
+    currentBalance = testResponseBody.balances[0].amount;
+    console.log('Balance:', currentBalance);
     console.log('get_balance_request', getBalanceBody);
   });
 
@@ -361,9 +344,9 @@ describe('Checks balance and if response status is successful', async () => {
     console.log('get_balance_response', testResponseBody);
   });
 
-  it('Player balance matches the response', () => {
-    //impossible to display amount since lastbalance in field 'it' is undefined.
-    expect(testResponseBody.balances[0].amount);
+  it('Current balance matches the response', () => {
+    //impossible to display amount inside 'it' since currentBalance in field 'it' is undefined.
+    expect(currentBalance);
   });
 
   it('Assert status code is 200', () => {
@@ -378,13 +361,13 @@ describe('Checks balance and if response status is successful', async () => {
 describe('Checks balance for table and if response status is successful', async () => {
   let testResponse;
   let testResponseBody;
-  let lastBalance;
+  let currentBalance;
 
   before(async () => {
     testResponse = await getBalanceForTable();
     testResponseBody = await testResponse.json();
-    lastBalance = testResponseBody.balances[0].amount;
-    console.log('Balance for table: ' + lastBalance);
+    currentBalance = testResponseBody.balances[0].amount;
+    console.log('Balance for table:', currentBalance);
     console.log('get_balance_for_table_request', getBalanceForTableBody);
   });
 
@@ -392,9 +375,9 @@ describe('Checks balance for table and if response status is successful', async 
     console.log('get_balance_for_table_response', testResponseBody);
   });
 
-  it('Assert balance for the table', () => {
-    //impossible to display amount since lastbalance in field 'it' is undefined.
-    expect(testResponseBody.balances[0].amount);
+  it('Current balance for table matches the response', () => {
+    //impossible to display amount inside 'it' since currentBalance in field 'it' is undefined.
+    expect(currentBalance);
   });
 
   it('Assert status code is 200', () => {
@@ -406,14 +389,23 @@ describe('Checks balance for table and if response status is successful', async 
   });
 });
 
-describe('Checks placebet1', async () => {
+describe('Checks withdrawal_request_1 and no error in response', async () => {
   let testResponse;
   let testResponseBody;
+  let currentBalance;
+  let previousBalance;
+  let expectedBalance;
 
   before(async () => {
     testResponse = await withdrawal1();
     testResponseBody = await testResponse.json();
-    // console.log('Bet is: ' + bet);
+    currentBalance = testResponseBody.balances[0].amount;
+    previousBalance = currentBalance + bet1;
+    expectedBalance = previousBalance - bet1;
+    console.log('Previous balance:', previousBalance);
+    console.log('Bet is:', bet1);
+    console.log('Current balance:', currentBalance);
+    console.log('Expected balance:', expectedBalance);
     console.log('withdrawal_request_1', withdrawalBody1);
   });
 
@@ -421,108 +413,105 @@ describe('Checks placebet1', async () => {
     console.log('withdrawal_response_1', testResponseBody);
   });
 
-  it('Checks the bet ', () => {});
+  it('Assert no error in response', () => {
+    expect(testResponseBody.text).not.eql('error');
+  });
+
+  it('Current balance is equal to Expected balance', () => {
+    expect(currentBalance).eql(expectedBalance);
+  });
+});
+
+describe('Checks withdrawal_request_2 and no error in response', async () => {
+  let testResponse;
+  let testResponseBody;
+  let currentBalance;
+  let previousBalance;
+  let expectedBalance;
+
+  before(async () => {
+    testResponse = await withdrawal2();
+    testResponseBody = await testResponse.json();
+    currentBalance = testResponseBody.balances[0].amount;
+    previousBalance = currentBalance + bet;
+    expectedBalance = previousBalance - bet;
+    console.log('Previous balance:', previousBalance);
+    console.log('Bet is:', bet);
+    console.log('Current balance:', currentBalance);
+    console.log('Expected balance:', expectedBalance);
+    console.log('withdrawal_request_2', withdrawalBody2);
+  });
+
+  after(() => {
+    console.log('withdrawal_response_2', testResponseBody);
+  });
+
+  it('Assert no error in response', () => {
+    expect(testResponseBody.text).not.eql('error');
+  });
+
+  it('Current balance is equal to Expected balance', () => {
+    expect(currentBalance).eql(expectedBalance);
+  });
+});
+
+describe('Checks if final_settlement_request response status is successful', async () => {
+  let testResponse;
+  let testResponseBody;
+
+  before(async () => {
+    testResponse = await finalSettlement();
+    testResponseBody = await testResponse.json();
+    console.log('Payout is:', payyof1);
+    console.log('final_settlement_request', finalSettlementBody);
+  });
+
+  after(() => {
+    console.log('final_settlement_response', testResponseBody);
+  });
+
+  it('Assert status code is 202', () => {
+    expect(testResponse.status).eql(202);
+  });
+});
+
+describe('Checks balance and if response status is successful', async () => {
+  let testResponse;
+  let testResponseBody;
+  let currentBalance;
+  let initialBalance;
+  let expectedBalance;
+
+  before(async () => {
+    testResponse = await getBalance();
+    testResponseBody = await testResponse.json();
+    currentBalance = testResponseBody.balances[0].amount;
+    initialBalance = currentBalance - payyof1 + bet1 + bet;
+    expectedBalance = initialBalance - bet1 - bet + payyof1;
+    console.log('Initial balance:', initialBalance);
+    console.log('Current balance:', currentBalance);
+    console.log('Expected balance:', expectedBalance);
+    console.log('get_balance_request', getBalanceBody);
+  });
+
+  after(() => {
+    console.log('get_balance_response', testResponseBody);
+  });
+
+  it('Current balance matches the response', () => {
+    //impossible to display amount since currentBalance in field 'it' is undefined.
+    expect(currentBalance);
+  });
+
+  it('Current balance is equal to Expected balance', () => {
+    expect(currentBalance).eql(expectedBalance);
+  });
+
+  it('Assert status code is 200', () => {
+    expect(testResponse.status).eql(200);
+  });
 
   it('Assert no error in response', () => {
     expect(testResponseBody.text).not.eql('error');
   });
 });
-
-// describe('Checks if response status is successful', async () => {
-//   let testResponse;
-//   let testResponseBody;
-
-//   before(async () => {
-//     testResponse = await withdrawal2();
-//     testResponseBody = await testResponse.json();
-//   });
-
-//   after(() => {
-//     console.log('withdrawal_request_1', testResponseBody);
-//   });
-
-//   it('Assert status code is 200', () => {
-//     expect(testResponse.status).eql(200);
-//   });
-
-//   it('Assert that licenseePlayerId has correct value', () => {
-//     expect(testResponseBody.licenseePlayerId).eql(
-//       initializeSessionBodyObjects.licenseePlayerId
-//     );
-//   });
-
-//   it('Assert that licenseeSessionId is not null', () => {
-//     expect(testResponseBody.licenseePlayerId).not.eql(null);
-//   });
-
-//   it('Assert that currency has correct value', () => {
-//     expect(testResponseBody.currency).eql(
-//       initializeSessionBodyObjects.currency
-//     );
-//   });
-// });
-
-// describe('Checks if response status is successful', async () => {
-//   let testResponse;
-//   let testResponseBody;
-
-//   before(async () => {
-//     testResponse = await finalSettlement();
-//     testResponseBody = await testResponse.json();
-//   });
-
-//   after(() => {
-//     console.log('final_settlement_request', testResponseBody);
-//   });
-
-//   it('Assert status code is 200', () => {
-//     expect(testResponse.status).eql(200);
-//   });
-
-//   it('Assert that licenseePlayerId has correct value', () => {
-//     expect(testResponseBody.licenseePlayerId).eql(
-//       initializeSessionBodyObjects.licenseePlayerId
-//     );
-//   });
-
-//   it('Assert that licenseeSessionId is not null', () => {
-//     expect(testResponseBody.licenseePlayerId).not.eql(null);
-//   });
-
-//   it('Assert that currency has correct value', () => {
-//     expect(testResponseBody.currency).eql(
-//       initializeSessionBodyObjects.currency
-//     );
-//   });
-// });
-
-// describe('Checks balance and if response status is successful', async () => {
-//   let testResponse;
-//   let testResponseBody;
-//   let lastBalance;
-
-//   before(async () => {
-//     testResponse = await getBalance();
-//     testResponseBody = await testResponse.json();
-//     lastBalance = testResponseBody.balances[0].amount;
-//     console.log('Player balance is ' + lastBalance);
-//     console.log('get_balance_request', getBalanceBody);
-//   });
-
-//   after(() => {
-//     console.log('get_balance_response', testResponseBody);
-//   });
-
-//   it('Player balance matches the response', () => {
-//     //impossible to display amount since lastbalance in field 'it' is undefined.
-//     expect(testResponseBody.balances[0].amount);
-//   });
-
-//   it('Assert status code is 200', () => {
-//     expect(testResponse.status).eql(200);
-//   });
-
-//   it('Assert no error in response', () => {
-//     expect(testResponseBody.text).not.eql('error');
-//   });
-// });
