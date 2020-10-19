@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const mocha = require('mocha');
 const chai = require('chai');
 const expect = chai.expect; // for using expect in test
-const setEnvironmentVariable = require('../util/randomGenerator')
+const setEnvironmentVariable = require('../util/randomGenerator');
 
 const correlationId = setEnvironmentVariable.getRandomId(32);
 const sessionId = setEnvironmentVariable.getRandomId(32);
@@ -14,43 +14,50 @@ const betId1 = setEnvironmentVariable.getRandomId(32);
 const betId2 = setEnvironmentVariable.getRandomId(32);
 const gameType = 'holdem';
 const tableId = 'HoldemTable00001';
-const resolution = 'cancel the game';
 const bet = 5;
 const payyof = 10; // one bet in first transaction and one bet in second transaction
+const casinoId = 'joycasino0000001';
+const currency = 'EUR';
+const licenseePlayerId = 'aaaaaa';
+const playerId = '108nit1q4ndf1jx9';
+const balanceId = 'combined';
+const channelType = 'Phone';
+const channelOs = 'Other';
+const clientIpAddress = '127.0.0.1';
 
-let timestamp = new Date().toJSON();
+const timestamp = new Date().toJSON();
 const placeTime = timestamp;
 
 const initializeSessionBodyObjects = {
   correlationId: correlationId,
   sessionId: sessionId,
-  casinoId: 'joycasino0000001',
+  casinoId: casinoId,
   licenseeSessionId: licenseeSessionId,
-  currency: 'EUR',
-  licenseePlayerId: 'aaaaaa',
+  currency: currency,
+  licenseePlayerId: licenseePlayerId,
   channel: {
-    type: 'Phone',
+    type: channelType,
     wrapped: false,
-    os: 'Other'
+    os: channelOs
   },
-  clientIpAddress: '127.0.0.1'
+  clientIpAddress: clientIpAddress
 };
 
 const completeSessionBodyObjects = {
   correlationId: correlationId,
   sessionId: sessionId,
-  playerId: '108nit1q4ndf1jx9',
+  playerId: playerId,
   channel: {
-    type: 'Phone',
+    type: channelType,
     wrapped: false,
-    os: 'Other'
+    os: channelOs
   }
 };
 
 const getBalanceBodyObjects = {
   correlationId: correlationId,
   sessionId: sessionId,
-  balanceId: 'combined'
+  balanceId: balanceId
 };
 
 const getBalanceForTableBodyObjects = {
@@ -62,7 +69,7 @@ const getBalanceForTableBodyObjects = {
   },
   gameType: gameType,
   // gameSubType: 'gameSubType',
-  balanceId: 'combined'
+  balanceId: balanceId
 };
 
 const withdrawalBodyObjects1 = {
@@ -84,7 +91,7 @@ const withdrawalBodyObjects1 = {
     }
   ],
   placeTime: placeTime,
-  balanceId: 'combined'
+  balanceId: balanceId
 };
 
 const withdrawalBodyObjects2 = {
@@ -106,7 +113,7 @@ const withdrawalBodyObjects2 = {
     }
   ],
   placeTime: placeTime,
-  balanceId: 'combined'
+  balanceId: balanceId
 };
 
 const finalSettlementBodyObjects = {
@@ -404,7 +411,7 @@ describe('Checks if final_settlement_request response status is successful', asy
   before(async () => {
     testResponse = await finalSettlement();
     testResponseBody = await testResponse.json();
-    console.log('Resolution is:', resolution);
+    console.log('Resolution is: Cancel the game');
     console.log('Payout is:', payyof);
     console.log('final_settlement_request', finalSettlementBody);
   });
