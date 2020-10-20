@@ -2,9 +2,8 @@
 HTTP-client, which can send all crucial API3 requests and parse responses.
 
 HTTP-client with tests covers two basic scenarios: 1) Three bets in one round | 2) Cancelled game
-Framework "mocha" with library "chai" are used for the tests.
 
-To run the test open terminal in this project and write - npm test
+Framework "mocha" with library "chai" are used for the tests.
 
 The project architecture looks like this:
 1. Folder "CancelledGame", which contains the following files: 'CancelBody.js', 'CancelFunctions.js', 'CancelRequests.js'.
@@ -15,6 +14,7 @@ The project architecture looks like this:
 6. README.md
 7. package-lock.json
 8. package.json
+
 
 Scenario Three bets in one round:
 
@@ -29,7 +29,7 @@ Scenario Three bets in one round:
 
 All requests of this scenario have been covered with tests.
 Test_Scenario is located in folder "test".
-To run the test separately open terminal in this project and write - npm test test/Winning.js           
+To run the test open terminal in this project and write - npm test test/Winning.js           
 
 
 Scenario Cancelled game:
@@ -45,7 +45,7 @@ Scenario Cancelled game:
 
 All requests of this scenario have been covered with tests.
 Test_Scenario is located in folder "test".
-To run the test separately open terminal in this project and write - npm test test/Cancel.js           
+To run the test open terminal in this project and write - npm test test/Cancel.js           
 
 
-To run the certain test write e.g. npm test -- --f 'Checks withdrawal_request_2'
+To run the certain test write e.g. npm test -- --f 'withdrawal_request_2'
