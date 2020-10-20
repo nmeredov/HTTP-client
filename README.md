@@ -8,13 +8,13 @@ To run the test open terminal in this project and write - npm test
 
 The project architecture looks like this:
 1. Folder "CancelledGame", which contains the following files: 'CancelBody.js', 'CancelFunctions.js', 'CancelRequests.js'.
-2. Folder "node_modules".
-3. Folder "test", which contains the following files: 'Cancel.js', 'Winning.js'. 
-4. Folder "ThreeBetInOneRound", which contains the following files: 'WinBody.js', 'WinFunctions.js', 'WinRequests.js'.
+2. Folder "ThreeBetInOneRound", which contains the following files: 'WinBody.js', 'WinFunctions.js', 'WinRequests.js'.
+3. Folder "node_modules".
+4. Folder "test", which contains the following files: 'Cancel.js', 'Winning.js'. 
 5. Folder "util", which contains the following files: 'GlobalVariables.js', 'RandomGenerator.js', 'WinRequests.js'.
-6. package-lock.json
-7. package.json
-8. README.md
+6. README.md
+7. package-lock.json
+8. package.json
 
 Scenario Three bets in one round:
 
