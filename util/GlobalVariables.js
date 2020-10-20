@@ -21,6 +21,7 @@ export const correlationId = setEnvironmentVariable.getRandomId(32);
 export const sessionId = setEnvironmentVariable.getRandomId(32);
 export const licenseeSessionId = setEnvironmentVariable.getRandomId(32);
 export const gameId = setEnvironmentVariable.getRandomId(24);
+export const gameId1 = setEnvironmentVariable.getRandomId(24);
 export const txId1 = setEnvironmentVariable.getRandomNumericId(18);
 export const txId2 = setEnvironmentVariable.getRandomNumericId(18);
 export const betId1 = setEnvironmentVariable.getRandomId(32);

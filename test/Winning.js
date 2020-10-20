@@ -122,7 +122,7 @@ describe('get_balance_for_table_request - Checks balance for table and if respon
   });
 });
 
-describe('withdrawal_response_1 - Checks withdrawal and no error in response', async () => {
+describe('withdrawal_request_1 - Checks withdrawal and no error in response', async () => {
   let testResponse;
   let testResponseBody;
   let currentBalance;

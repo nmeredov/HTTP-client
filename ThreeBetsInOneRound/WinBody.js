@@ -46,7 +46,7 @@ export const getBalanceForTableBodyObjects = {
 
 export const withdrawalBodyObjects1 = {
   correlationId: global.correlationId,
-  gameId: global.gameId,
+  gameId: global.gameId1,
   sessionId: global.sessionId,
   txId: global.txId1,
   gameType: global.gameType,
@@ -73,7 +73,7 @@ export const withdrawalBodyObjects1 = {
 
 export const withdrawalBodyObjects2 = {
   correlationId: global.correlationId,
-  gameId: global.gameId,
+  gameId: global.gameId1,
   sessionId: global.sessionId,
   txId: global.txId2,
   gameType: global.gameType,
@@ -95,7 +95,7 @@ export const withdrawalBodyObjects2 = {
 
 export const finalSettlementBodyObjects = {
   correlationId: global.correlationId,
-  gameId: global.gameId,
+  gameId: global.gameId1,
   reason: {
     type: 'GameFinished',
     finishedTransactions: [
