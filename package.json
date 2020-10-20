@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "HTTP-client, which can send all crucial API3 requests and parse response",
   "main": "client.js",
+  "type": "module",
   "scripts": {
     "test": "mocha"
   },

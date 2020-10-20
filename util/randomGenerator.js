@@ -1,4 +1,4 @@
-module.exports = setEnvironmentVariable = {
+export const setEnvironmentVariable = {
   getRandomId: function (idLength) {
     let id = 'inttest';
     let idPrefixLength = id.length;
